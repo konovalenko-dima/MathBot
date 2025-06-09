@@ -44,3 +44,30 @@
 2025-06-09 17:04:30,917 - ERROR - Server error: [Errno 48] Address already in use
 2025-06-09 17:04:41,275 - ERROR - Server error: [Errno 48] Address already in use
 2025-06-09 17:04:53,932 - INFO - 192.168.1.2 - "GET / HTTP/1.1" 200 -
+2025-06-09 17:10:07,038 - INFO - 192.168.1.2 - "GET / HTTP/1.1" 304 -
+2025-06-09 17:14:25,797 - INFO - 192.168.1.2 - "GET / HTTP/1.1" 304 -
+2025-06-09 17:26:18,142 - INFO - 192.168.1.4 - "GET / HTTP/1.1" 200 -
+2025-06-09 17:27:27,746 - INFO - 192.168.1.4 - "GET / HTTP/1.1" 200 -
+2025-06-09 17:27:27,816 - INFO - 192.168.1.4 - "GET /styles.css HTTP/1.1" 200 -
+2025-06-09 17:27:27,829 - INFO - 192.168.1.4 - "GET /script.js HTTP/1.1" 200 -
+2025-06-09 17:32:44,446 - ERROR - Server error: [Errno 48] Address already in use
+2025-06-09 17:32:56,049 - INFO - 192.168.1.2 - "GET / HTTP/1.1" 200 -
+2025-06-09 17:35:17,463 - ERROR - Server error: [Errno 48] Address already in use
+2025-06-09 17:35:33,688 - INFO - 192.168.1.2 - "GET / HTTP/1.1" 304 -
+2025-06-09 17:35:36,087 - INFO - 192.168.1.2 - "GET / HTTP/1.1" 304 -
+2025-06-09 17:35:39,146 - INFO - 192.168.1.2 - "GET / HTTP/1.1" 304 -
+2025-06-09 17:35:40,067 - INFO - 192.168.1.2 - "GET / HTTP/1.1" 304 -
+2025-06-09 17:35:43,036 - INFO - 192.168.1.2 - "GET / HTTP/1.1" 304 -
+2025-06-09 17:38:23,977 - ERROR - Server error: [Errno 48] Address already in use
+2025-06-09 17:38:53,067 - INFO - 192.168.1.2 - "GET / HTTP/1.1" 200 -
+2025-06-09 17:47:34,536 - ERROR - Server error: [Errno 48] Address already in use
+2025-06-09 17:48:26,785 - ERROR - Server error: [Errno 48] Address already in use
+2025-06-09 17:51:34,502 - ERROR - Server error: [Errno 48] Address already in use
+2025-06-09 18:03:22,754 - INFO - Server started on port 8081
+2025-06-09 18:03:55,767 - INFO - 127.0.0.1 - "GET / HTTP/1.1" 200 -
+2025-06-09 18:03:55,795 - INFO - 127.0.0.1 - "GET /styles.css HTTP/1.1" 304 -
+2025-06-09 18:03:56,239 - INFO - 192.168.1.2 - code 404, message File not found
+2025-06-09 18:03:56,239 - INFO - 192.168.1.2 - "GET /favicon.ico HTTP/1.1" 404 -
+2025-06-09 18:07:16,352 - INFO - 127.0.0.1 - "GET /script.js HTTP/1.1" 304 -
+2025-06-09 18:07:16,631 - INFO - 127.0.0.1 - code 404, message File not found
+2025-06-09 18:07:16,632 - INFO - 127.0.0.1 - "GET /favicon.ico HTTP/1.1" 404 -

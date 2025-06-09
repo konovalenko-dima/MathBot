@@ -14,15 +14,10 @@ load_dotenv()
 TOKEN = os.getenv("TOKEN")
 bot = telebot.TeleBot(TOKEN)
 
-# Обработчик команды /site - открывает сайт в браузере
-@bot.message_handler(commands=['site'])
-def site(message):
-    webbrowser.open(SITE_URL)
-
 # Получаем IP адрес компьютера для доступа к сайту
 hostname = socket.gethostname()
 local_ip = socket.gethostbyname(hostname)
-SITE_URL = f"http://{local_ip}:8081"  # Используем IP вместо localhost
+SITE_URL = f"http://{local_ip}:8081"  # Локальный URL для разработки
 FACEBOOK_URL = "https://www.facebook.com/dmitry.konovalenko.1/friends"
 INSTAGRAM_URL = "https://instagram.com/dmitry.konovalenko"
 
@@ -65,6 +60,12 @@ def create_time_keyboard():
     markup.add(*buttons)
     return markup
 
+# Обработчик команды /site - открывает сайт в браузере
+@bot.message_handler(commands=['site'])
+def site(message):
+    webbrowser.open(SITE_URL)
+    bot.send_message(message.chat.id, f"🌐 Локальный адрес сайта: {SITE_URL}")
+
 # Обработчик команды /start - главное меню
 @bot.message_handler(commands=["start", "main", "hello"])
 def main(message):
@@ -75,10 +76,17 @@ def main(message):
     btn4 = types.InlineKeyboardButton("💳 Оплата", callback_data="help")
     btn5 = types.InlineKeyboardButton("📞 Контакты", callback_data="contacts_info")
     btn6 = types.InlineKeyboardButton("⭐️ Отзывы", callback_data="reviews")
-    btn7 = types.InlineKeyboardButton("🌐 Наш сайт", url=SITE_URL)
+    btn7 = types.InlineKeyboardButton("🌐 Наш сайт", callback_data="site_url")
     btn8 = types.InlineKeyboardButton("📅 Расписание", callback_data="schedule")
     markup.add(btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8)
-    bot.send_message(message.chat.id, f'👋 Привет, {message.from_user.first_name}! \n\n🔍 Выберите опцию из меню ниже:', reply_markup=markup)
+    
+    welcome_text = f"""👋 Привет, {message.from_user.first_name}!
+
+Добро пожаловать в бот репетитора по математике! 🎓
+
+📱 Выберите нужный раздел в меню ниже ⬇️"""
+    
+    bot.send_message(message.chat.id, welcome_text, reply_markup=markup)
 
 # Обработчик команды /info - информационное меню
 @bot.message_handler(commands=["info"])
@@ -90,7 +98,7 @@ def info(message):
     btn4 = types.InlineKeyboardButton("💳 Оплата", callback_data="help")
     btn5 = types.InlineKeyboardButton("📞 Контакты", callback_data="contacts_info")
     btn6 = types.InlineKeyboardButton("⭐️ Отзывы", callback_data="reviews")
-    btn7 = types.InlineKeyboardButton("🌐 Наш сайт", url=SITE_URL)
+    btn7 = types.InlineKeyboardButton("🌐 Наш сайт", callback_data="site_url")
     markup.add(btn1, btn2, btn3, btn4, btn5, btn6, btn7)
     bot.send_message(message.chat.id, "🔍 Выберите опцию из меню ниже:", reply_markup=markup)
 
@@ -102,117 +110,189 @@ def main(message):
 # Обработчик всех callback-запросов от кнопок
 @bot.callback_query_handler(func=lambda call: True)
 def callback(call):
-    # Обработка различных callback-данных
-    if call.data == "commands":
-        # Показываем информацию о пакетах занятий
-        packages_text = """📚 Доступные пакеты занятий:
+    if call.data == "site_url":
+        bot.send_message(call.message.chat.id, f"🌐 Локальный адрес сайта: {SITE_URL}")
+    elif call.data == "commands":
+        packages_text = """📚 <b>Пакеты занятий</b>
 
-⏱ Разовое занятие (50 минут) - 300 грн
+🎯 <b>Разовое занятие:</b>
+• 50 минут
+• 300 грн
 
-📦 Пакет А:   📦 Пакет Б:     📦 Пакет В:
-• 5 занятий    • 10 занятий     • 20 занятий
-• 45 минут      • 50 минут        • 60 минут
-• 1400 грн      • 2400 грн         • 4400 грн"""
+📦 <b>Пакет А:</b>
+• 5 занятий
+• 45 минут
+• 1400 грн
 
+📦 <b>Пакет Б:</b>
+• 10 занятий
+• 50 минут
+• 2400 грн
 
-        bot.send_message(call.message.chat.id, packages_text)
+📦 <b>Пакет В:</b>
+• 20 занятий
+• 60 минут
+• 4400 грн
+
+💫 <i>Выберите удобный для вас вариант!</i>"""
+        
+        markup = types.InlineKeyboardMarkup(row_width=1)
+        btn = types.InlineKeyboardButton("📅 Записаться на занятие", callback_data="schedule")
+        markup.add(btn)
+        bot.send_message(call.message.chat.id, packages_text, parse_mode="HTML", reply_markup=markup)
+
     elif call.data == "about":
-        # Показываем информацию о ценах и акциях
-        about_text = f"""💰 Цены и акции:
+        about_text = f"""💰 <b>Цены и акции</b>
 
-🎁 Специальное предложение:
-При оплате пакетов А, Б или В - первое занятие бесплатно!
+🎁 <b>Специальное предложение:</b>
+При оплате любого пакета (А, Б или В) - первое занятие бесплатно!
 
-📝 Это бот для получения информации и оплаты уроков математики.
+💎 <b>Наши преимущества:</b>
+• Индивидуальный подход
+• Гибкий график
+• Онлайн и офлайн занятия
+• Современные методики
 
-🌐 Наши социальные сети:
-<a href="{FACEBOOK_URL}">Facebook</a>
-<a href="{INSTAGRAM_URL}">Instagram</a>"""
-        bot.send_message(call.message.chat.id, about_text, parse_mode="HTML", disable_web_page_preview=True)
+🌐 <b>Мы в соцсетях:</b>
+<a href="{FACEBOOK_URL}">📘 Facebook</a>
+<a href="{INSTAGRAM_URL}">📸 Instagram</a>"""
+        
+        markup = types.InlineKeyboardMarkup(row_width=1)
+        btn = types.InlineKeyboardButton("📅 Записаться на занятие", callback_data="schedule")
+        markup.add(btn)
+        bot.send_message(call.message.chat.id, about_text, parse_mode="HTML", disable_web_page_preview=True, reply_markup=markup)
+
     elif call.data == "contacts":
-        # Показываем информацию о занятиях
-        zoom_text = """🎓 Информация о занятиях:
+        zoom_text = """🎓 <b>Информация о занятиях</b>
 
-📅 Занятия проходят по назначенному расписанию
-💻 Платформа: Zoom
-🔗 Ссылка на конференцию:
-https://us05web.zoom.us/j/6281722803?pwd=TFNSSHpwSEhJMVVZY2NSRzUrcFkwdz09"""
-        bot.send_message(call.message.chat.id, zoom_text)
+📱 <b>Формат занятий:</b>
+• Онлайн через Zoom
+• Индивидуальный подход
+• Интерактивные материалы
+
+🔗 <b>Ссылка на Zoom:</b>
+https://us05web.zoom.us/j/6281722803?pwd=TFNSSHpwSEhJMVVZY2NSRzUrcFkwdz09
+
+💡 <i>Все материалы предоставляются бесплатно!</i>"""
+        
+        markup = types.InlineKeyboardMarkup(row_width=1)
+        btn = types.InlineKeyboardButton("📅 Записаться на занятие", callback_data="schedule")
+        markup.add(btn)
+        bot.send_message(call.message.chat.id, zoom_text, parse_mode="HTML", reply_markup=markup)
+
     elif call.data == "help":
-        # Показываем информацию об оплате
-        payment_text = """💳 Информация об оплате:
+        payment_text = """💳 <b>Способы оплаты</b>
 
-🏦 Банковская карта (monobank):
-<b><u>4441 1110 7175 4448</u></b>
+🏦 <b>Банковская карта (monobank):</b>
+<code>4441 1110 7175 4448</code>
 
-💎 TON coin:
-<b><u>UQCQelJLMF451RE4fJIg1UWleDBZksfDyHMkxZj68e7GTe1M</u></b>"""
-        bot.send_message(call.message.chat.id, payment_text, parse_mode="HTML")
+💎 <b>TON coin:</b>
+<code>UQCQelJLMF451RE4fJIg1UWleDBZksfDyHMkxZj68e7GTe1M</code>
+
+💫 <i>После оплаты отправьте скриншот чека для подтверждения</i>"""
+        
+        markup = types.InlineKeyboardMarkup(row_width=1)
+        btn = types.InlineKeyboardButton("📅 Записаться на занятие", callback_data="schedule")
+        markup.add(btn)
+        bot.send_message(call.message.chat.id, payment_text, parse_mode="HTML", reply_markup=markup)
+
     elif call.data == "contacts_info":
-        # Показываем контактную информацию
-        contact_text = f"""📞 Наши контакты:
+        contact_text = f"""📞 <b>Наши контакты</b>
 
-📱 Telegram бот: @zno_nmt2025_bot
-📧 Email: konovalenkodim@gmail.com
-💬 Telegram группа: @zno_ukraine2018
-🌐 Facebook: <a href="{FACEBOOK_URL}">Наша страница</a>
-📸 Instagram: <a href="{INSTAGRAM_URL}">Наш Instagram</a>
+📱 <b>Telegram:</b>
+• Бот: @zno_nmt2025_bot
+• Группа: @zno_ukraine2018
 
-⏰ Часы работы:
+📧 <b>Email:</b>
+konovalenkodim@gmail.com
+
+🌐 <b>Социальные сети:</b>
+<a href="{FACEBOOK_URL}">📘 Facebook</a>
+<a href="{INSTAGRAM_URL}">📸 Instagram</a>
+
+⏰ <b>Часы работы:</b>
 Пн-Пт: 9:00 - 20:00"""
-        bot.send_message(call.message.chat.id, contact_text, parse_mode="HTML", disable_web_page_preview=True)
+        
+        markup = types.InlineKeyboardMarkup(row_width=1)
+        btn = types.InlineKeyboardButton("📅 Записаться на занятие", callback_data="schedule")
+        markup.add(btn)
+        bot.send_message(call.message.chat.id, contact_text, parse_mode="HTML", disable_web_page_preview=True, reply_markup=markup)
+
     elif call.data == "reviews":
-        # Показываем меню отзывов
-        markup = types.InlineKeyboardMarkup(row_width=2)
-        btn1 = types.InlineKeyboardButton("⭐️ Посмотреть отзывы на сайте", url=SITE_URL)
+        markup = types.InlineKeyboardMarkup(row_width=1)
+        btn1 = types.InlineKeyboardButton("⭐️ Отзывы на сайте", url=SITE_URL)
         btn2 = types.InlineKeyboardButton("📘 Отзывы на Facebook", url=FACEBOOK_URL)
         btn3 = types.InlineKeyboardButton("📸 Отзывы в Instagram", url=INSTAGRAM_URL)
-        markup.add(btn1, btn2, btn3)
-        bot.send_message(call.message.chat.id, "📝 Выберите, где вы хотите посмотреть отзывы:", reply_markup=markup)
-    elif call.data == "website":
-        # Показываем меню сайта
-        markup = types.InlineKeyboardMarkup(row_width=2)
-        btn1 = types.InlineKeyboardButton("🌐 Открыть сайт", url="http://localhost:8081")
-        btn2 = types.InlineKeyboardButton("📘 Наш Facebook", url=FACEBOOK_URL)
-        btn3 = types.InlineKeyboardButton("📸 Наш Instagram", url=INSTAGRAM_URL)
-        markup.add(btn1, btn2, btn3)
-        bot.send_message(call.message.chat.id, "🔗 Выберите, куда вы хотите перейти:", reply_markup=markup)
+        btn4 = types.InlineKeyboardButton("📅 Расписание", callback_data="schedule")
+        markup.add(btn1, btn2, btn3, btn4)
+        
+        reviews_text = """⭐️ <b>Отзывы наших учеников</b>
+
+Выберите платформу, где хотите посмотреть отзывы ⬇️
+
+💫 <i>Мы гордимся успехами наших учеников!</i>"""
+        
+        bot.send_message(call.message.chat.id, reviews_text, parse_mode="HTML", reply_markup=markup)
+
     elif call.data == "schedule":
-        # Показываем расписание
         markup = create_schedule_keyboard()
-        bot.send_message(call.message.chat.id, "📅 Выберите дату для занятия:", reply_markup=markup)
+        schedule_text = """📅 <b>Выберите дату для занятия</b>
+
+Доступны только рабочие дни (Пн-Пт)
+Выберите удобную дату ⬇️"""
+        bot.send_message(call.message.chat.id, schedule_text, parse_mode="HTML", reply_markup=markup)
+
     elif call.data.startswith("date_"):
-        # Обработка выбора даты
         date = call.data.split("_")[1]
         user_data[call.from_user.id] = {"date": date}
         markup = create_time_keyboard()
-        bot.send_message(call.message.chat.id, f"🕒 Выберите время для занятия на {date}:", reply_markup=markup)
+        time_text = f"""🕒 <b>Выберите время для занятия</b>
+
+Дата: {date}
+Выберите удобное время ⬇️"""
+        bot.send_message(call.message.chat.id, time_text, parse_mode="HTML", reply_markup=markup)
+
     elif call.data.startswith("time_"):
-        # Обработка выбора времени
         time = call.data.split("_")[1]
         user_id = call.from_user.id
         if user_id in user_data and "date" in user_data[user_id]:
             date = user_data[user_id]["date"]
-            confirmation_text = f"""✅ Подтверждение записи:
+            confirmation_text = f"""✅ <b>Подтверждение записи</b>
 
-📅 Дата: {date}
-🕒 Время: {time}
+📅 <b>Дата:</b> {date}
+🕒 <b>Время:</b> {time}
 
-Для подтверждения записи, пожалуйста, оплатите занятие.
-💳 Реквизиты для оплаты можно получить, нажав кнопку 'Оплата' в главном меню."""
+💳 <b>Для подтверждения записи:</b>
+1. Оплатите занятие
+2. Нажмите кнопку "Подтвердить"
+3. Отправьте скриншот оплаты"""
             
             markup = types.InlineKeyboardMarkup(row_width=2)
             btn1 = types.InlineKeyboardButton("✅ Подтвердить", callback_data="confirm_booking")
             btn2 = types.InlineKeyboardButton("❌ Отменить", callback_data="cancel_booking")
-            markup.add(btn1, btn2)
+            btn3 = types.InlineKeyboardButton("💳 Оплата", callback_data="help")
+            markup.add(btn1, btn2, btn3)
             
-            bot.send_message(call.message.chat.id, confirmation_text, reply_markup=markup)
+            bot.send_message(call.message.chat.id, confirmation_text, parse_mode="HTML", reply_markup=markup)
+
     elif call.data == "confirm_booking":
-        # Подтверждение записи
-        bot.send_message(call.message.chat.id, "✅ Спасибо за запись! Мы свяжемся с вами для подтверждения оплаты.")
+        confirm_text = """✅ <b>Спасибо за запись!</b>
+
+Мы свяжемся с вами для подтверждения оплаты.
+
+💫 <i>До встречи на занятии!</i>"""
+        bot.send_message(call.message.chat.id, confirm_text, parse_mode="HTML")
+
     elif call.data == "cancel_booking":
-        # Отмена записи
-        bot.send_message(call.message.chat.id, "❌ Запись отменена. Вы можете попробовать записаться снова.")
+        cancel_text = """❌ <b>Запись отменена</b>
+
+Вы можете попробовать записаться снова, нажав кнопку "Расписание" в главном меню."""
+        
+        markup = types.InlineKeyboardMarkup(row_width=1)
+        btn = types.InlineKeyboardButton("📅 Записаться снова", callback_data="schedule")
+        markup.add(btn)
+        
+        bot.send_message(call.message.chat.id, cancel_text, parse_mode="HTML", reply_markup=markup)
         if call.from_user.id in user_data:
             del user_data[call.from_user.id]
 
@@ -223,6 +303,19 @@ def info(message):
         bot.send_message(message.chat.id, f'👋 Привет, {message.from_user.first_name} {message.from_user.last_name}!')
     elif message.text.lower() == "id":
         bot.reply_to(message, f'🆔 Ваш ID: {message.from_user.id}')
+
+# Обработчик выхода пользователя из чата
+@bot.message_handler(content_types=['left_chat_member'])
+def handle_left_chat_member(message):
+    farewell_text = """👋 <b>До новых встреч!</b>
+
+Спасибо, что были с нами! 
+
+💫 <i>Желаем вам успехов в изучении математики!</i>
+
+Если захотите вернуться, мы всегда будем рады видеть вас снова! 🌟"""
+    
+    bot.send_message(message.chat.id, farewell_text, parse_mode="HTML")
 
 # Запуск бота
 bot.polling(none_stop=True)
