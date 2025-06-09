@@ -76,7 +76,7 @@ def main(message):
     btn5 = types.InlineKeyboardButton("📞 Контакты", callback_data="contacts_info")
     btn6 = types.InlineKeyboardButton("⭐️ Отзывы", callback_data="reviews")
     btn7 = types.InlineKeyboardButton("🌐 Наш сайт", url=SITE_URL)
-    btn8 = types.InlineKeyboardButton("📅 Записаться на занятие", callback_data="schedule")
+    btn8 = types.InlineKeyboardButton("📅 Расписание", callback_data="schedule")
     markup.add(btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8)
     bot.send_message(message.chat.id, f'👋 Привет, {message.from_user.first_name}! \n\n🔍 Выберите опцию из меню ниже:', reply_markup=markup)
 
