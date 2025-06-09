@@ -1,0 +1,37 @@
+2025-06-09 01:09:51,975 - INFO - Server started on port 8080
+2025-06-09 01:11:12,839 - INFO - 127.0.0.1 - "GET / HTTP/1.1" 200 -
+2025-06-09 01:11:12,848 - INFO - 127.0.0.1 - "GET /styles.css HTTP/1.1" 200 -
+2025-06-09 01:11:12,850 - INFO - 127.0.0.1 - "GET /script.js HTTP/1.1" 200 -
+2025-06-09 01:11:13,403 - INFO - 127.0.0.1 - code 404, message File not found
+2025-06-09 01:11:13,403 - INFO - 127.0.0.1 - "GET /favicon.ico HTTP/1.1" 404 -
+2025-06-09 01:42:00,575 - INFO - 127.0.0.1 - "GET / HTTP/1.1" 304 -
+2025-06-09 01:42:00,589 - INFO - 127.0.0.1 - "GET /styles.css HTTP/1.1" 304 -
+2025-06-09 01:42:00,591 - INFO - 127.0.0.1 - "GET /script.js HTTP/1.1" 304 -
+2025-06-09 02:01:59,961 - INFO - 127.0.0.1 - "GET / HTTP/1.1" 200 -
+2025-06-09 02:01:59,995 - INFO - 127.0.0.1 - "GET /script.js HTTP/1.1" 304 -
+2025-06-09 02:22:42,201 - INFO - Server started on port 8081
+2025-06-09 02:22:55,853 - INFO - Server stopped by user
+2025-06-09 02:24:23,272 - INFO - Server started on port 8081
+2025-06-09 02:24:31,523 - INFO - Server stopped by user
+2025-06-09 02:24:38,781 - INFO - Server started on port 8081
+2025-06-09 02:26:28,132 - INFO - 127.0.0.1 - "GET / HTTP/1.1" 200 -
+2025-06-09 02:26:28,143 - INFO - 127.0.0.1 - "GET /styles.css HTTP/1.1" 200 -
+2025-06-09 02:26:28,144 - INFO - 127.0.0.1 - "GET /script.js HTTP/1.1" 200 -
+2025-06-09 02:26:28,430 - INFO - 127.0.0.1 - code 404, message File not found
+2025-06-09 02:26:28,431 - INFO - 127.0.0.1 - "GET /favicon.ico HTTP/1.1" 404 -
+2025-06-09 02:34:23,993 - INFO - Server stopped by user
+2025-06-09 02:34:38,757 - INFO - Server started on port 8081
+2025-06-09 02:35:30,892 - INFO - Server stopped by user
+2025-06-09 02:59:27,323 - INFO - Server started on port 8081
+2025-06-09 03:05:02,833 - INFO - Server started on port 8081
+2025-06-09 03:09:18,886 - INFO - 127.0.0.1 - "GET / HTTP/1.1" 200 -
+2025-06-09 03:09:18,898 - INFO - 127.0.0.1 - "GET /styles.css HTTP/1.1" 200 -
+2025-06-09 03:09:18,901 - INFO - 127.0.0.1 - "GET /script.js HTTP/1.1" 304 -
+2025-06-09 11:51:10,825 - INFO - 127.0.0.1 - "GET / HTTP/1.1" 304 -
+2025-06-09 11:51:10,839 - INFO - 127.0.0.1 - "GET /styles.css HTTP/1.1" 304 -
+2025-06-09 11:51:10,841 - INFO - 127.0.0.1 - "GET /script.js HTTP/1.1" 304 -
+2025-06-09 12:15:11,555 - INFO - 192.168.1.2 - "GET / HTTP/1.1" 200 -
+2025-06-09 12:15:11,574 - INFO - 192.168.1.2 - "GET /styles.css HTTP/1.1" 200 -
+2025-06-09 12:15:11,581 - INFO - 192.168.1.2 - "GET /script.js HTTP/1.1" 200 -
+2025-06-09 12:15:12,264 - INFO - 192.168.1.2 - code 404, message File not found
+2025-06-09 12:15:12,264 - INFO - 192.168.1.2 - "GET /favicon.ico HTTP/1.1" 404 -
